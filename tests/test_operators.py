@@ -118,13 +118,12 @@ def test_sigmoid(a):
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats, small_floats)
-@seed(73849588452874697803402160955907955227)
 def test_transitive(a, b, c):
     "Test the transitive property of less-than (a < b and b < c implies a < c)"
     # TODO: Implement for Task 0.2.
     # raise NotImplementedError("Need to implement for Task 0.2")
-    assume(a < b and b < c)
-    assert a < c
+    if lt(a, b) and lt(b, c):
+        assert lt(a, c)
 
 
 @pytest.mark.task0_2
