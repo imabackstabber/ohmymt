@@ -1,8 +1,4 @@
 from collections import deque
-from cv2 import edgePreservingFilter
-
-from sklearn.feature_selection import VarianceThreshold
-
 variable_count = 1
 
 
