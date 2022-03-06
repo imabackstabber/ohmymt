@@ -20,7 +20,7 @@ from minitorch.operators import (
     sum,
     zipWith,
 )
-from hypothesis import given,assume,seed
+from hypothesis import given, assume, seed
 from hypothesis.strategies import lists
 from .strategies import small_floats, assert_close
 import pytest
@@ -112,8 +112,9 @@ def test_sigmoid(a):
     assert sigmoid(a) >= 0 and sigmoid(a) <= 1
     assert math.fabs(1 - sigmoid(a) - sigmoid(-a)) < 1e-6
     assert math.fabs(sigmoid(0) - 0.5) < 1e-6
-    assume(a < 5) # avoid plateau
+    assume(a < 5)  # avoid plateau
     assert sigmoid(a + 1e-6) > sigmoid(a)
+
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats, small_floats)
@@ -122,8 +123,9 @@ def test_transitive(a, b, c):
     "Test the transitive property of less-than (a < b and b < c implies a < c)"
     # TODO: Implement for Task 0.2.
     # raise NotImplementedError("Need to implement for Task 0.2")
-    assume(a<b and b < c)
+    assume(a < b and b < c)
     assert a < c
+
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats)
@@ -137,9 +139,10 @@ def test_symmetric(a, b):
     # raise NotImplementedError("Need to implement for Task 0.2")
     assert mul(a, b) == mul(b, a)
 
+
 @pytest.mark.task0_2
-@given(small_floats,small_floats,small_floats)
-def test_distribute(x,y,z):
+@given(small_floats, small_floats, small_floats)
+def test_distribute(x, y, z):
     r"""
     Write a test that ensures that your operators distribute, i.e.
     :math:`z \times (x + y) = z \times x + z \times y`
@@ -147,7 +150,7 @@ def test_distribute(x,y,z):
     # None
     # TODO: Implement for Task 0.2.
     # raise NotImplementedError("Need to implement for Task 0.2")
-    assert math.fabs(mul(z,add(x,y)) -  add(mul(z,x),mul(z,y))) < 1e-6
+    assert math.fabs(mul(z, add(x, y)) - add(mul(z, x), mul(z, y))) < 1e-6
 
 
 @pytest.mark.task0_2
@@ -188,7 +191,7 @@ def test_sum_distribute(ls1, ls2):
     """
     # TODO: Implement for Task 0.3.
     # raise NotImplementedError("Need to implement for Task 0.3")
-    assert math.fabs((sum(zipWith(add)(ls1,ls2))) - sum(ls1) - sum(ls2)) < 1e-6
+    assert math.fabs((sum(zipWith(add)(ls1, ls2))) - sum(ls1) - sum(ls2)) < 1e-6
 
 
 @pytest.mark.task0_3

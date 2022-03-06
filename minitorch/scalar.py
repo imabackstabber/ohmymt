@@ -27,12 +27,13 @@ def central_difference(f, *vals, arg=0, epsilon=1e-6):
     vals = list(vals)
     ls1 = vals.copy()
     ls2 = vals.copy()
-    ls1[arg] -= epsilon 
-    ls2[arg] += epsilon 
+    ls1[arg] -= epsilon
+    ls2[arg] += epsilon
     # print('as:',ls1[arg],ls2[arg],ls2[arg] - ls1[arg])
     # print(f(*ls2) - f(*ls1))
     print(f)
     return (f(*ls2) - f(*ls1)) / (2 * epsilon)
+
 
 # ## Task 1.2 and 1.4
 # Scalar Forward and Backward
@@ -69,7 +70,7 @@ class Scalar(Variable):
     def __add__(self, b):
         # TODO: Implement for Task 1.2.
         # raise NotImplementedError("Need to implement for Task 1.2")
-        return Add.apply(self,b)
+        return Add.apply(self, b)
 
     def __bool__(self):
         return bool(self.data)
@@ -77,22 +78,22 @@ class Scalar(Variable):
     def __lt__(self, b):
         # TODO: Implement for Task 1.2.
         # raise NotImplementedError("Need to implement for Task 1.2")
-        return LT.apply(self,b)
+        return LT.apply(self, b)
 
     def __gt__(self, b):
         # TODO: Implement for Task 1.2.
         # raise NotImplementedError("Need to implement for Task 1.2")
-        return EQ.apply(Add.apply(LT.apply(self,b),EQ.apply(self,b)),0.0)
+        return EQ.apply(Add.apply(LT.apply(self, b), EQ.apply(self, b)), 0.0)
 
     def __eq__(self, b):
         # TODO: Implement for Task 1.2.
         # raise NotImplementedError("Need to implement for Task 1.2")
-        return EQ.apply(self,b)
+        return EQ.apply(self, b)
 
     def __sub__(self, b):
         # TODO: Implement for Task 1.2.
         # raise NotImplementedError("Need to implement for Task 1.2")
-        return Add.apply(self,Neg.apply(b))
+        return Add.apply(self, Neg.apply(b))
 
     def __neg__(self):
         # TODO: Implement for Task 1.2.
@@ -209,15 +210,15 @@ class Mul(ScalarFunction):
     def forward(ctx, a, b):
         # TODO: Implement for Task 1.2.
         # raise NotImplementedError("Need to implement for Task 1.2")
-        ctx.save_for_backward(a,b)
+        ctx.save_for_backward(a, b)
         return a * b
 
     @staticmethod
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
         # raise NotImplementedError("Need to implement for Task 1.4")
-        a,b = ctx.saved_values
-        return d_output * b,d_output * a
+        a, b = ctx.saved_values
+        return d_output * b, d_output * a
 
 
 class Inv(ScalarFunction):
@@ -235,7 +236,7 @@ class Inv(ScalarFunction):
         # TODO: Implement for Task 1.4.
         # raise NotImplementedError("Need to implement for Task 1.4")
         a = ctx.saved_values
-        return operators.inv_back(a,d_output)
+        return operators.inv_back(a, d_output)
 
 
 class Neg(ScalarFunction):
@@ -290,7 +291,7 @@ class ReLU(ScalarFunction):
         # raise NotImplementedError("Need to implement for Task 1.4")
         a = ctx.saved_values
         # return 1.0 if a > 0 else 0.0
-        return operators.relu_back(a,d_output)
+        return operators.relu_back(a, d_output)
 
 
 class Exp(ScalarFunction):
@@ -324,7 +325,7 @@ class LT(ScalarFunction):
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
         # raise NotImplementedError("Need to implement for Task 1.4")
-        return 0.0,0.0
+        return 0.0, 0.0
 
 
 class EQ(ScalarFunction):
@@ -340,7 +341,7 @@ class EQ(ScalarFunction):
     def backward(ctx, d_output):
         # TODO: Implement for Task 1.4.
         # raise NotImplementedError("Need to implement for Task 1.4")
-        return 0.0,0.0
+        return 0.0, 0.0
 
 
 def derivative_check(f, *scalars):

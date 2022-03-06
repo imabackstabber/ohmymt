@@ -132,6 +132,7 @@ def inv(x):
     # raise NotImplementedError("Need to implement for Task 0.1")
     return 1.0 / x
 
+
 def inv_back(x, d):
     r"If :math:`f(x) = 1/x` compute :math:`d \times f'(x)`"
     # TODO: Implement for Task 0.1.
@@ -144,6 +145,7 @@ def relu_back(x, d):
     # TODO: Implement for Task 0.1.
     # raise NotImplementedError("Need to implement for Task 0.1")
     return d if x > 0.0 else 0.0
+
 
 # ## Task 0.3
 
@@ -168,7 +170,7 @@ def map(fn):
     """
     # TODO: Implement for Task 0.3.
     # raise NotImplementedError("Need to implement for Task 0.3")
-    return lambda ls:[fn(x) for x in ls]
+    return lambda ls: [fn(x) for x in ls]
 
 
 def negList(ls):
@@ -196,14 +198,14 @@ def zipWith(fn):
     """
     # TODO: Implement for Task 0.3.
     # raise NotImplementedError("Need to implement for Task 0.3")
-    return lambda ls1,ls2:[fn(x,y) for x,y in zip(ls1,ls2)]
+    return lambda ls1, ls2: [fn(x, y) for x, y in zip(ls1, ls2)]
 
 
 def addLists(ls1, ls2):
     "Add the elements of `ls1` and `ls2` using :func:`zipWith` and :func:`add`"
     # TODO: Implement for Task 0.3.
     # raise NotImplementedError("Need to implement for Task 0.3")
-    return zipWith(add)(ls1,ls2)
+    return zipWith(add)(ls1, ls2)
 
 
 def reduce(fn, start):
@@ -227,8 +229,9 @@ def reduce(fn, start):
     def func(ls):
         ans = start
         for i in ls:
-            ans = fn(ans,i)
+            ans = fn(ans, i)
         return ans
+
     return func
 
 
@@ -236,11 +239,11 @@ def sum(ls):
     "Sum up a list using :func:`reduce` and :func:`add`."
     # TODO: Implement for Task 0.3.
     # raise NotImplementedError("Need to implement for Task 0.3")
-    return reduce(add,0)(ls)
+    return reduce(add, 0)(ls)
 
 
 def prod(ls):
     "Product of a list using :func:`reduce` and :func:`mul`."
     # TODO: Implement for Task 0.3.
     # raise NotImplementedError("Need to implement for Task 0.3")
-    return reduce(mul,1)(ls)
+    return reduce(mul, 1)(ls)

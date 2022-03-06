@@ -46,12 +46,12 @@ class Module:
         # TODO: Implement for Task 0.4.
         # raise NotImplementedError("Need to implement for Task 0.4")
         ans = []
-        for k,v in self._parameters.items():
-            ans.append((k,v))
-        for k,v in self._modules.items():
+        for k, v in self._parameters.items():
+            ans.append((k, v))
+        for k, v in self._modules.items():
             tmp = v.named_parameters()
-            for _k,_v in tmp:
-                ans.append((k+'.'+_k,_v))
+            for _k, _v in tmp:
+                ans.append((k + "." + _k, _v))
         return ans
 
     def parameters(self):
