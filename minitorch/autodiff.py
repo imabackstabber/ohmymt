@@ -1,3 +1,7 @@
+from collections import deque
+from cv2 import edgePreservingFilter
+
+from sklearn.feature_selection import VarianceThreshold
 variable_count = 1
 
 
@@ -191,7 +195,17 @@ class History:
             list of numbers : a derivative with respect to `inputs`
         """
         # TODO: Implement for Task 1.4.
-        raise NotImplementedError('Need to implement for Task 1.4')
+        # raise NotImplementedError("Need to implement for Task 1.4")
+        ans = []
+        local_grad = self.last_fn.backward(self.ctx,d_output)
+        if not isinstance(local_grad,tuple):
+            local_grad = (local_grad,)
+        local_grad = list(local_grad)
+        for input in self.inputs:
+            if not is_constant(input):
+                ans.append(local_grad[0])
+            local_grad = local_grad[1:]
+        return local_grad
 
 
 class FunctionBase:
@@ -274,7 +288,17 @@ class FunctionBase:
         # Tip: Note when implementing this function that
         # cls.backward may return either a value or a tuple.
         # TODO: Implement for Task 1.3.
-        raise NotImplementedError('Need to implement for Task 1.3')
+        # raise NotImplementedError("Need to implement for Task 1.3")
+        ans = []
+        local_grad = cls.backward(ctx,d_output)
+        if not isinstance(local_grad,tuple):
+            local_grad = (local_grad,) # make it a tuple
+        local_grad = list(local_grad)
+        for input in inputs:
+            if not is_constant(input):
+                ans.append((input,local_grad[0]))
+            local_grad = local_grad[1:]
+        return ans
 
 
 # Algorithms for backpropagation
@@ -296,7 +320,51 @@ def topological_sort(variable):
                             starting from the right.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    # raise NotImplementedError("Need to implement for Task 1.4")
+    ans = []
+    du = dict()
+    du[variable.unique_id] = 1 # starting from right
+    # 1. count all edges to calc in-degree
+    # 2. do topo sort
+    # 1. dfs to calc in-degree
+    edges = []
+    def dfs(var):
+        if var.is_leaf():
+            # no edge points to leaf node
+            # print(var,var.unique_id)
+            return
+        else:
+            var_input = var.history.inputs
+            for input in var_input:
+                if not is_constant(input):
+                    edges.append((var.unique_id,input.unique_id))
+                    # print(var.unique_id,input.unique_id)
+                    dfs(input)
+        
+    dfs(variable)
+    edges = list(set(edges))
+    for _,v in edges:
+        if v in du.keys():
+            du[v] += 1
+        else:
+            du[v] = 1
+    # 2. do topo sort,it assure starting from right-most node
+    q = deque()
+    du[variable.unique_id] -= 1 # 1 to 0
+    q.append(variable)
+    while(len(q)):
+        node = q.popleft()
+        ans.append(node)
+        if node.is_leaf():
+            continue
+        else:
+            inputs = node.history.inputs
+            for input in inputs:
+                if not is_constant(input):
+                    du[input.unique_id] -= 1
+                    if du[input.unique_id] == 0:
+                        q.append(input)
+    return ans
 
 
 def backpropagate(variable, deriv):
@@ -313,4 +381,26 @@ def backpropagate(variable, deriv):
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    # raise NotImplementedError("Need to implement for Task 1.4")
+    # 0. get a topo-sorted queue
+    path = topological_sort(variable)
+    # 1. create a dictionary of Var and deriv
+    d = dict()
+    d[variable.unique_id] = deriv
+    # 2. pull a Var and deriv
+    for p in path:
+        # print(p,p.unique_id,p.is_leaf())
+        d_out = d[p.unique_id]
+        if p.is_leaf():
+            p.accumulate_derivative(d_out)
+        else:
+            last_fn = p.history.last_fn # has property 'chain_rule'
+            ctx = p.history.ctx
+            inputs = p.history.inputs
+            local_grad = last_fn.chain_rule(ctx,inputs,d_out)
+            for var,der in local_grad:
+                # print('son',var.unique_id,der)
+                if var.unique_id in d.keys():
+                    d[var.unique_id] += der
+                else:
+                    d[var.unique_id] = der
