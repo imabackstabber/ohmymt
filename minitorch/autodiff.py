@@ -1,4 +1,5 @@
 from collections import deque
+
 variable_count = 1
 
 

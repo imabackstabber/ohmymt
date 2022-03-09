@@ -30,6 +30,7 @@ def index_to_position(index, strides):
     strides = array(strides)
     return (index * strides).sum()
 
+
 def to_index(ordinal, shape, out_index):
     """
     Convert an `ordinal` to an index in the `shape`.
@@ -50,7 +51,7 @@ def to_index(ordinal, shape, out_index):
     # raise NotImplementedError("Need to implement for Task 2.1")
     # print('ordinal',ordinal,' shape',shape)
     mod = [1]
-    for i in range(len(shape) - 1,0,-1):
+    for i in range(len(shape) - 1, 0, -1):
         mod.append(mod[-1] * shape[i])
     mod = mod[::-1]
     for i in range(len(out_index)):
@@ -212,7 +213,7 @@ class TensorData:
         new_shape = tuple(new_shape)
         new_strides = tuple(new_strides)
         new_storage = self._storage.copy()
-        ans = TensorData(new_storage,new_shape,new_strides)
+        ans = TensorData(new_storage, new_shape, new_strides)
         return ans
 
     def to_string(self):
