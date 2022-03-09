@@ -1,4 +1,5 @@
 import random
+from turtle import shape
 from .operators import prod
 from numpy import array, float64, ndarray
 import numba
@@ -78,7 +79,15 @@ def broadcast_index(big_index, big_shape, shape, out_index):
         None : Fills in `out_index`.
     """
     # TODO: Implement for Task 2.2.
-    raise NotImplementedError("Need to implement for Task 2.2")
+    # raise NotImplementedError("Need to implement for Task 2.2")
+    assert len(big_shape) >= len(shape), "should pass big_shape first"
+    len_bs, len_s = len(big_shape), len(shape)
+    while len_bs != 0 and len_s != 0:
+        if big_shape[len_bs] == shape[len_s]:
+            out_index[len_s] = big_index[len_bs]
+        elif shape[len_s] == 1:
+            out_index[len_s] = 0
+        len_bs, len_s = len_bs - 1, len_s - 1
 
 
 def shape_broadcast(shape1, shape2):
@@ -96,7 +105,25 @@ def shape_broadcast(shape1, shape2):
         IndexingError : if cannot broadcast
     """
     # TODO: Implement for Task 2.2.
-    raise NotImplementedError("Need to implement for Task 2.2")
+    # raise NotImplementedError("Need to implement for Task 2.2")
+    shape1, shape2 = list(shape1), list(shape2)
+    if len(shape2) < len(shape1):
+        tmp = shape1
+        shape1 = shape2
+        shape2 = tmp
+    while len(shape1) < len(shape2):
+        shape1 = [1] + shape1
+    for i in range(len(shape1)):
+        if shape1[i] == shape2[i]:
+            continue
+        elif shape1[i] == 1:
+            shape1[i] = shape2[i]
+        elif shape2[i] == 1:
+            shape2[i] = shape1[i]
+        else:
+            raise IndexingError
+
+    return tuple(shape1)
 
 
 def strides_from_shape(shape):
