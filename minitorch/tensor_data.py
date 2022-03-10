@@ -29,7 +29,7 @@ def index_to_position(index, strides):
     # raise NotImplementedError("Need to implement for Task 2.1")
     index = array(index)
     strides = array(strides)
-    return (index * strides).sum()
+    return int((index * strides).sum())
 
 
 def to_index(ordinal, shape, out_index):
@@ -50,15 +50,9 @@ def to_index(ordinal, shape, out_index):
     """
     # TODO: Implement for Task 2.1.
     # raise NotImplementedError("Need to implement for Task 2.1")
-    # print('ordinal',ordinal,' shape',shape)
-    mod = [1]
-    for i in range(len(shape) - 1, 0, -1):
-        mod.append(mod[-1] * shape[i])
-    mod = mod[::-1]
-    for i in range(len(out_index)):
-        out_index[i] = ordinal / mod[i]
-        ordinal = ordinal % mod[i]
-    # print('out_index',out_index)
+    for i in range(len(shape) - 1, - 1, - 1):
+        out_index[i] = ordinal % shape[i]
+        ordinal = ordinal // shape[i]
 
 
 def broadcast_index(big_index, big_shape, shape, out_index):
@@ -81,13 +75,11 @@ def broadcast_index(big_index, big_shape, shape, out_index):
     # TODO: Implement for Task 2.2.
     # raise NotImplementedError("Need to implement for Task 2.2")
     assert len(big_shape) >= len(shape), "should pass big_shape first"
-    len_bs, len_s = len(big_shape), len(shape)
-    while len_bs != 0 and len_s != 0:
-        if big_shape[len_bs] == shape[len_s]:
-            out_index[len_s] = big_index[len_bs]
-        elif shape[len_s] == 1:
-            out_index[len_s] = 0
-        len_bs, len_s = len_bs - 1, len_s - 1
+    for idx,val in enumerate(shape):
+        if val == 1:
+            out_index[idx] = 0
+        else:
+            out_index[idx] = big_index[idx + len(big_shape) - len(shape)]
 
 
 def shape_broadcast(shape1, shape2):
