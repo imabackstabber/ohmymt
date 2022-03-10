@@ -1,5 +1,4 @@
 import random
-from turtle import shape
 from .operators import prod
 from numpy import array, float64, ndarray
 import numba
