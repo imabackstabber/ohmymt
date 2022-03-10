@@ -50,7 +50,7 @@ def to_index(ordinal, shape, out_index):
     """
     # TODO: Implement for Task 2.1.
     # raise NotImplementedError("Need to implement for Task 2.1")
-    for i in range(len(shape) - 1, - 1, - 1):
+    for i in range(len(shape) - 1, -1, -1):
         out_index[i] = ordinal % shape[i]
         ordinal = ordinal // shape[i]
 
@@ -75,7 +75,7 @@ def broadcast_index(big_index, big_shape, shape, out_index):
     # TODO: Implement for Task 2.2.
     # raise NotImplementedError("Need to implement for Task 2.2")
     assert len(big_shape) >= len(shape), "should pass big_shape first"
-    for idx,val in enumerate(shape):
+    for idx, val in enumerate(shape):
         if val == 1:
             out_index[idx] = 0
         else:
