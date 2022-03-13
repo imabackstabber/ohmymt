@@ -403,6 +403,7 @@ def grad_check(f, *vals):
         x.zero_grad_()
     random.seed(10)
     out = f(*vals)
+    print("out", out)
     out.sum().backward()
     err_msg = """
 

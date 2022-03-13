@@ -58,7 +58,7 @@ class Variable:
         """
         if d_output is None:
             d_output = 1.0
-        backpropagate(self, d_output)
+        backpropagate(self, self.expand(d_output))
 
     @property
     def derivative(self):
@@ -294,7 +294,7 @@ class FunctionBase:
         local_grad = list(local_grad)
         for input in inputs:
             if not is_constant(input):
-                ans.append((input, local_grad[0]))
+                ans.append((input, input.expand(local_grad[0])))
             local_grad = local_grad[1:]
         return ans
 
