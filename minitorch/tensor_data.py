@@ -226,8 +226,8 @@ class TensorData:
         new_strides = []
         new_shape = []
         for i in order:
-            new_strides.append(self._strides[i])
-            new_shape.append(self._shape[i])
+            new_strides.append(self.strides[i])
+            new_shape.append(self.shape[i])
         new_shape = tuple(new_shape)
         new_strides = tuple(new_strides)
         new_storage = self._storage.copy()
